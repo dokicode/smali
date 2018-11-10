@@ -30,7 +30,7 @@ if(in_array($arrServerResponse[0], $serverAns)){
 	$r = $pdo->query($sql);
 	if($r) {
 		$ans['status'] = true;
-		$ans['short_link'] = SITE_URL.$ans['url_hash'];
+		$ans['short_link'] = SITE_URL."/".$ans['url_hash'];
 	}else{
 		$ans['status'] = false;
 		$ans['error'] = "Error by inserting link in DB";
@@ -59,7 +59,7 @@ elseif($action == 'getLinks'){
 			$html.="
 			<tr>
 			<td>".$row['id']."</td>
-			<td>".SITE_URL.$row['link_hash']."</td>
+			<td>".SITE_URL."/".$row['link_hash']."</td>
 			<td>".$row['link_url']."</td>
 			</tr>";
 		}
