@@ -59,8 +59,7 @@ elseif($action == 'getLinks'){
 			$html.="
 			<tr>
 			<td>".$row['id']."</td>
-			<td>".$row['link_hash']."</td>
-			<td>".hash('crc32', $row['link_url'])."</td>
+			<td>".SITE_URL.$row['link_hash']."</td>
 			<td>".$row['link_url']."</td>
 			</tr>";
 		}

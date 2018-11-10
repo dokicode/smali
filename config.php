@@ -3,7 +3,8 @@
 define("ROOT_DIR", dirname (__FILE__));
 define("TPL_DIR", ROOT_DIR.'/tpl');
 define("PATH_TO_SQLITE_FILE", 'db/phpsqlite.db');
-define("SITE_URL", 'http://site.com/bitly/');
+//define("SITE_URL", 'http://site.com/bitly/');
+define("SITE_URL", $_SERVER['HTTP_HOST']);
 
 
 require_once("app/class.pdo.php");
