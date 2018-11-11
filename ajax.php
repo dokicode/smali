@@ -41,6 +41,7 @@ if(in_array($arrServerResponse[0], $serverAns)){
 	
 }else{
 	$ans['server_response'] = "Link is wrong: ". $arrServerResponse[0];
+	$ans['error'] = "Link is wrong: ". $arrServerResponse[0];
 	$ans['status'] = false;
 }
 

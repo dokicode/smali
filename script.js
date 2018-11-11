@@ -4,13 +4,7 @@
 
 	function validate(url){
 		var pattern = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-        if (pattern.test(url)) {
-            //alert("Url is valid");
-            return true;
-        }else{
-        	//alert("Url is wrong");
-        	return false;
-        }
+        return pattern.test(url);
 	}
 
 	ns.generateLink = function(ans){
