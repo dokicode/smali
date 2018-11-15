@@ -1,12 +1,5 @@
 <?
-
-//define("ROOT_DIR", dirname (__FILE__));
-//define("TPL_DIR", ROOT_DIR.'/tpl');
-
-//require_once("app/class.config.php");
 require_once("config.php");
-
-
 
 if(!file_exists(ROOT_DIR."/".PATH_TO_SQLITE_FILE)){
 	//echo "db file doesn't exist";
@@ -29,6 +22,5 @@ $tpl->load_template_from_file("main.html");
 $tpl->add_param("text", "some text here");
 $html = $tpl->generate();
 echo $html;
-//echo $tpl->tpl_dir;
 
 ?>

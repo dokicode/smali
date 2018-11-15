@@ -26,6 +26,10 @@ class DB {
 		}
 	}
 
+	public function exec($command){
+		return $this->pdo->exec($command);
+	}
+
 
 	public function query($sql) {
 		return $this->pdo->query($sql);

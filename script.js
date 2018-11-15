@@ -1,5 +1,5 @@
 ;(function(){
-	//alert('hallo');
+
 	var ns = this;
 
 	function validate(url){
@@ -9,10 +9,12 @@
 
 	ns.generateLink = function(ans){
 		if(ans['status']) {
-			document.getElementById('short_link').innerHTML = ans['short_link'];
+			//document.getElementById('short_link').innerHTML = ans['short_link'];
+			document.getElementById('short_link').innerHTML = ans['html'];
 		}else{
 			alert(ans['error']);
 		}
+		btnGenerate.disabled = false;
 		//alert(ans['status']);
         //alert(ans['server_response']);
         //alert(ans['url_hash']);
@@ -26,21 +28,23 @@
         //alert(ans['server_response']);
         //alert(ans['url_hash']);
         document.getElementById('links').innerHTML = ans['html'];
+        updateDelEvent();
 	}
+
+
+	ns.deleteItem = function (ans){
+		var itemId = ans['itemId'];
+		//console.log('itemId:' + itemId);
+		var trDel = document.getElementById('tr-' + itemId);
+		trDel.remove();
+	}	
 
 	function sendAjax(ajaxObj){
 
-/*
-		var ajaxObj = {
-            'action': "generateLink",
-            'link': link
-        };
-*/
 		var json = JSON.stringify(ajaxObj);
 
         //alert(ajaxObj['action']);
         
-
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST', 'ajax.php');
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -54,8 +58,6 @@
             if(xhr.status != 200) {
                 alert( '200: ' + xhr.status + ' : ' + xhr.statusText );
             } else {
-            	//json.action();
-            	
                 //alert(xhr.getAllResponseHeaders());//return headers
                 //alert( xhr.responseText);
                 var response = xhr.responseText;
@@ -82,9 +84,10 @@
             'action': "generateLink",
             'link': encodeURIComponent(link)
         };
+        	btnGenerate.disabled = true;
 			sendAjax(ajaxObj);
 		}else{
-			alert('Link is wrong');
+			alert('Link has wrong format');
 		}
 		//alert('link:' + link);
 
@@ -98,8 +101,21 @@
 	            'action': "getLinks"
 	        };
 			sendAjax(ajaxObj);
+	});
 
-		//alert('link:' + link);
+	function updateDelEvent() {
+		var btnDel = document.querySelectorAll(".del");
+		for(var i=0; i<btnDel.length; i++){
+			btnDel[i].addEventListener("click", function(){
+				var ajaxObj = {
+		            'action': "deleteItem",
+		            'itemId': this.getAttribute('data-item')
+		        };
+				sendAjax(ajaxObj);
+			});
+		}
+	}
 
-	})
+
+
 })();

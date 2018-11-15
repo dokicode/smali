@@ -2,15 +2,31 @@
 
 require_once("config.php");
 
-$hash = $_GET['hash'];
+$hash = isset($_GET['hash']) ? $_GET['hash'] : '';
 //echo "go:" . $hash;
 
-$pdo = new DB();
-$pdo->connect();
-$sql = "SELECT link_url FROM links WHERE link_hash='".$hash."'";
-$r = $pdo->query($sql);
-$row = $pdo->fetch($r);
-//echo $row['link_url'];
+if( !empty($hash) ){
 
-header('Location:'.$row['link_url']);
+	$pdo = new DB();
+	$pdo->connect();
+	$sql = "SELECT link_url FROM links WHERE link_hash='".$hash."'";
+	$r = $pdo->query($sql);
+
+	$row = $pdo->fetch($r);
+	if( $row !== false ){
+		//echo "redirect";
+		header('Location:'.$row['link_url']);
+	}else{
+		header("HTTP/1.0 404 Not Found");
+		echo "Link was not found";
+	}
+
+
+}else{
+	header("HTTP/1.0 404 Not Found");
+	echo "Hash is empty";
+}
+
+
+
 ?>

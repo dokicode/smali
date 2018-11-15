@@ -9,20 +9,32 @@ extract($data1, EXTR_OVERWRITE);
 
 
 if($action == 'generateLink'){
-$arrServerResponse = get_headers($link, 1);
+	//$arrServerResponse = @get_headers($link, 1);
+	$serverResponseCode = getServerResponseCode( $link );
+	$ans['server_response'] = $serverResponseCode;
 
-//$ans = print_r($arrServerResponse, true);
-$serverAns[] = 'HTTP/1.1 200 OK';
-$serverAns[] = 'HTTP/1.0 200 OK';
+	if( $serverResponseCode == '404'){
+		$ans['status'] = false;
+		$ans['error'] = "Link is wrong (404)";
+	}else{
+		$ans['status'] = true;
+	}
 
-//if($arrServerResponse[0] == 'HTTP/1.1 200 OK'){
-if(in_array($arrServerResponse[0], $serverAns)){
-	$ans['server_response'] = "Link is valid: ". $arrServerResponse[0];
-	//$ans['url_hash'] = BaseIntEncoder::encode($link);
-	//$ans['url_hash'] = md5( time().$link );
+	if( $ans['status'] != false ) {
+		//if ( preg_match('/HTTP\/[0-9].[0-9][\s](2|3)[0-9]{2}[\s](.*?)/', $arrServerResponse[0]) ){
+		if ( $serverResponseCode >=200 && $serverResponseCode<400 ){
+			$ans['status'] = true;
+		}else{
+			$ans['status'] = false;
+			$ans['error'] = "Link is broken";
+		}
+
+	}  
+
+// server answer sample HTTP/1.1 200 OK';
+
+if( $ans['status'] == true ){
 	$ans['url_hash'] = hash( 'crc32', time().$link );
-	
-
 
 	$pdo = new DB();
 	$pdo->connect();
@@ -31,18 +43,15 @@ if(in_array($arrServerResponse[0], $serverAns)){
 	if($r) {
 		$ans['status'] = true;
 		$ans['short_link'] = SITE_URL."/".$ans['url_hash'];
+		$ans['html'] = <<<HTML
+<div class="w3-center w3-container w3-green">
+<span>{$ans['short_link']}</span>
+</div>
+HTML;
 	}else{
 		$ans['status'] = false;
 		$ans['error'] = "Error by inserting link in DB";
-	}
-
-
-
-	
-}else{
-	$ans['server_response'] = "Link is wrong: ". $arrServerResponse[0];
-	$ans['error'] = "Link is wrong: ". $arrServerResponse[0];
-	$ans['status'] = false;
+	}	
 }
 
 }//generateLink
@@ -51,19 +60,20 @@ elseif($action == 'getLinks'){
 	$html = '';
 	$pdo = new DB();
 	$pdo->connect();
-	$sql = "SELECT * FROM links";
+	$sql = "SELECT * FROM links ORDER BY id DESC";
 	$r = $pdo->query($sql);
 	if($r) {
-		$html = "<table class='w3-table  w3-striped'>";
+		$html = "<table id='link-table' class='w3-table  w3-striped'>";
 		while($row = $pdo->fetch($r)){
-			//$html.="<div>".$row['id'].'   '.$row['link_hash'].'   '.$row['link_url']."</div>";
 			$html.="
-			<tr>
+			<tr id='tr-".$row['id']."'>
+			<td class='del' data-item='".$row['id']."'><i class=\"fa fa-close w3-text-red\"></i></td>
 			<td>".$row['id']."</td>
-			<td>".SITE_URL."/".$row['link_hash']."</td>
+			<td><a target=\"_blank\" href=\"".SITE_URL."/".$row['link_hash']."\">".SITE_URL."/".$row['link_hash']."</a></td>
 			<td>".$row['link_url']."</td>
 			</tr>";
 		}
+
 		$html.="</table>";
 		$ans['html'] = $html;
 		$ans['status'] = true;
@@ -74,8 +84,21 @@ elseif($action == 'getLinks'){
 
 }//getLinks
 
+elseif($action == 'deleteItem') {
+	$pdo = new DB();
+	$pdo->connect();
+	$sql = "DELETE FROM links WHERE id='".$itemId."'";
+	$r = $pdo->exec($sql);
+	if($r){
+		$ans['status'] = true;
+		$ans['itemId'] = $itemId;
+	}else{
+		$ans['status'] = false;
+		$ans['error'] = "Error by deleting item form DB";
+	}
 
-//echo ("Link from AJAX:".$link);
+}
+
 echo json_encode($ans);
 
 ?>
