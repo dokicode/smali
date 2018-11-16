@@ -2,31 +2,25 @@
 
 require_once("config.php");
 
-
 $data = $_REQUEST['json'];
 $data1 = json_decode($data, true);
 extract($data1, EXTR_OVERWRITE);
-
+$ans = [];
 
 if($action == 'generateLink'){
-	//$arrServerResponse = @get_headers($link, 1);
 	$serverResponseCode = getServerResponseCode( $link );
 	$ans['server_response'] = $serverResponseCode;
 
-	if( $serverResponseCode == '404'){
-		$ans['status'] = false;
-		$ans['error'] = "Link is wrong (404)";
-	}else{
-		$ans['status'] = true;
-	}
-
 	if( $ans['status'] != false ) {
-		//if ( preg_match('/HTTP\/[0-9].[0-9][\s](2|3)[0-9]{2}[\s](.*?)/', $arrServerResponse[0]) ){
+
 		if ( $serverResponseCode >=200 && $serverResponseCode<400 ){
 			$ans['status'] = true;
 		}else{
 			$ans['status'] = false;
 			$ans['error'] = "Link is broken";
+			if( $serverResponseCode == '404'){
+      			$ans['error'] = "Link is wrong (404)";
+   			}
 		}
 
 	}  

@@ -3,7 +3,6 @@
 require_once("config.php");
 
 $hash = isset($_GET['hash']) ? $_GET['hash'] : '';
-//echo "go:" . $hash;
 
 if( !empty($hash) ){
 
@@ -13,8 +12,8 @@ if( !empty($hash) ){
 	$r = $pdo->query($sql);
 
 	$row = $pdo->fetch($r);
+	
 	if( $row !== false ){
-		//echo "redirect";
 		header('Location:'.$row['link_url']);
 	}else{
 		header("HTTP/1.0 404 Not Found");

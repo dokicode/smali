@@ -14,19 +14,11 @@
 		}else{
 			alert(ans['error']);
 		}
-		btnGenerate.disabled = false;
-		//alert(ans['status']);
-        //alert(ans['server_response']);
-        //alert(ans['url_hash']);
-        
+		btnGenerate.disabled = false;  
 	}
 
 
 	ns.getLinks = function(ans){
-		//alert(ans['status']);
-		//alert(ans['html']);
-        //alert(ans['server_response']);
-        //alert(ans['url_hash']);
         document.getElementById('links').innerHTML = ans['html'];
         updateDelEvent();
 	}
@@ -34,7 +26,6 @@
 
 	ns.deleteItem = function (ans){
 		var itemId = ans['itemId'];
-		//console.log('itemId:' + itemId);
 		var trDel = document.getElementById('tr-' + itemId);
 		trDel.remove();
 	}	
@@ -43,13 +34,9 @@
 
 		var json = JSON.stringify(ajaxObj);
 
-        //alert(ajaxObj['action']);
-        
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST', 'ajax.php');
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		//xhr.setRequestHeader('Content-Type', 'application/json');
-		//xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 		xhr.send('json=' + json);
 
 		xhr.onreadystatechange = function(){
@@ -58,10 +45,8 @@
             if(xhr.status != 200) {
                 alert( '200: ' + xhr.status + ' : ' + xhr.statusText );
             } else {
-                //alert(xhr.getAllResponseHeaders());//return headers
-                //alert( xhr.responseText);
+
                 var response = xhr.responseText;
-                //alert(response);
                 var ans = JSON.parse(response);
                 ns[ajaxObj['action']](ans);
  
@@ -79,17 +64,15 @@
 	btnGenerate.addEventListener("click", function(){
 		var link = document.getElementById("link").value;
 		if(validate(link)){
-			//alert("Url is valid");
-		var ajaxObj = {
-            'action': "generateLink",
-            'link': encodeURIComponent(link)
-        };
+			var ajaxObj = {
+	            'action': "generateLink",
+	            'link': encodeURIComponent(link)
+	        };
         	btnGenerate.disabled = true;
 			sendAjax(ajaxObj);
 		}else{
 			alert('Link has wrong format');
 		}
-		//alert('link:' + link);
 
 	});
 
