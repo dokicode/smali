@@ -11,8 +11,6 @@ if($action == 'generateLink'){
 	$serverResponseCode = getServerResponseCode( $link );
 	$ans['server_response'] = $serverResponseCode;
 
-	if( $ans['status'] != false ) {
-
 		if ( $serverResponseCode >=200 && $serverResponseCode<400 ){
 			$ans['status'] = true;
 		}else{
@@ -22,8 +20,6 @@ if($action == 'generateLink'){
       			$ans['error'] = "Link is wrong (404)";
    			}
 		}
-
-	}  
 
 // server answer sample HTTP/1.1 200 OK';
 
