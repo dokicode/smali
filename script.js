@@ -8,11 +8,11 @@
 	}
 
 	ns.generateLink = function(ans){
-		if(ans['status']) {
+		if(ans['success']) {
 			//document.getElementById('short_link').innerHTML = ans['short_link'];
 			document.getElementById('short_link').innerHTML = ans['html'];
 		}else{
-			alert(ans['error']);
+			alert('Error:' + ans['error']);
 		}
 		btnGenerate.disabled = false;  
 	}
@@ -48,13 +48,9 @@
 
                 var response = xhr.responseText;
                 var ans = JSON.parse(response);
-                ns[ajaxObj['action']](ans);
- 
-                
+                ns[ajaxObj['action']](ans);         
             }
         }
-       
-
 	}
 
 

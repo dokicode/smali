@@ -1,6 +1,7 @@
 <?
 require_once("config.php");
 
+
 if(!file_exists(ROOT_DIR."/".PATH_TO_SQLITE_FILE)){
 	//echo "db file doesn't exist";
 	$pdo = new DB();
@@ -16,11 +17,16 @@ if(!file_exists(ROOT_DIR."/".PATH_TO_SQLITE_FILE)){
 
 }
 
-$tpl = new TPL();
-$tpl->tpl_dir = TPL_DIR."/";
-$tpl->load_template_from_file("main.html");
-$tpl->add_param("text", "some text here");
-$html = $tpl->generate();
-echo $html;
+
+
+$router = new Router();
+$router->run();
+
+echo $router->html;
+
+
+
+
+
 
 ?>
