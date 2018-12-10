@@ -2,10 +2,6 @@
 
 class Links {
 
-	public function __constructor(){
-
-	}
-
 	public function getLinks(){
 		$html = '';
 		$pdo = new DB();
@@ -37,8 +33,7 @@ class Links {
 
 
 	public function generateLink( $link ){
-		$func = new Func();
-		$serverResponseCode = $func->getServerResponseCode( $link );
+		$serverResponseCode = Utils::getServerResponseCode( $link );
 		$ans['server_response'] = $serverResponseCode;
 
 			if ( $serverResponseCode >=200 && $serverResponseCode<400 ){

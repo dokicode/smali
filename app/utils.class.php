@@ -1,6 +1,6 @@
 <?
 
-class Func {
+class Utils {
 
 	public function getServerResponseCode( $url ){
 
